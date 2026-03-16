@@ -1,0 +1,27 @@
+{
+  "name": "car-service-project",
+  "version": "1.0.0",
+  "description": "Car Service Management System – Full-stack web application for managing vehicles and service records. Built with Vue.js frontend, Express.js REST API backend, and a database supporting CRUD operations for cars and maintenance data.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "install-all": "npm install && npm install --prefix frontend && npm install --prefix backend",
+    "frontend": "npm run dev --prefix frontend",
+    "backend": "npm run dev --prefix backend",
+    "dev": "concurrently \"npm run backend\" \"npm run frontend\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Lazar357/car-service.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Lazar357/car-service/issues"
+  },
+  "homepage": "https://github.com/Lazar357/car-service#readme",
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
+}
