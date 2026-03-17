@@ -50,15 +50,13 @@ export class MainService {
         validateStatus: () => true,
       })
 
-      // Handle 403 or token expiry (you can customize based on backend error message)
       if (response.status === 403 && retry) {
         const newAccess = await this.refreshAccessToken()
         if (newAccess) {
-          return this.useAxios(url, method, data, false) // retry once
+          return this.useAxios(url, method, data, false)
         }
       }
 
-      // Handle other status codes - OK and NO_CONTENT
       if (response.status === 200 || response.status === 204) {
         return response
       }
