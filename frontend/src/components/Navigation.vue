@@ -23,6 +23,13 @@ const logout = useLogout()
                         <li class="nav-item">
                             <RouterLink class="nav-link" to="/article">Articles</RouterLink>
                         </li>
+                    </template>
+                </ul>
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                    <template v-if="AuthService.getRefreshToken()">
+                        <li class="nav-item" v-if="AuthService.isAdmin()">
+                            <RouterLink class="nav-link" to="/register">Register</RouterLink>
+                        </li>
                         <li class="nav-item">
                             <button type="button" class="nav-link" @click="logout">Logout</button>
                         </li>
@@ -31,7 +38,7 @@ const logout = useLogout()
                         <RouterLink class="nav-link" to="/login">Login</RouterLink>
                     </li>
                 </ul>
-                <span class="navbar-text" v-if="AuthService.getRefreshToken()">
+                <span class="navbar-text ms-3" v-if="AuthService.getRefreshToken()">
                     <i class="fa-solid fa-user"></i> {{ AuthService.getUserEmail() }}
                 </span>
             </div>

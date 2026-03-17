@@ -12,6 +12,9 @@ export class User {
   @Column("varchar", { name: "password", length: 255 })
   password: string;
 
+  @Column("varchar", { name: "role", length: 255, default: () => "'user'" })
+  role: string;
+
   @Column("boolean", { name: "active", default: () => "true" })
   active: boolean;
 }

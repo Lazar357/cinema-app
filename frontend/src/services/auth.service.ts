@@ -3,12 +3,14 @@ import type { AuthModel } from '../models/auth.model'
 const ACCESS_TOKEN_KEY = 'access_token'
 const REFRESH_TOKEN_KEY = 'refresh_token'
 const EMAIL_KEY = 'email'
+const ROLE_KEY = 'role'
 
 export class AuthService {
   static setTokens(auth: AuthModel) {
     localStorage.setItem(ACCESS_TOKEN_KEY, auth.access)
     localStorage.setItem(REFRESH_TOKEN_KEY, auth.refresh)
     localStorage.setItem(EMAIL_KEY, auth.email)
+    localStorage.setItem(ROLE_KEY, auth.role)
   }
 
   static getAccessToken() {
@@ -23,9 +25,18 @@ export class AuthService {
     return localStorage.getItem(EMAIL_KEY)
   }
 
+  static getUserRole() {
+    return localStorage.getItem(ROLE_KEY)
+  }
+
+  static isAdmin() {
+    return this.getUserRole() === 'admin'
+  }
+
   static clearTokens() {
     localStorage.removeItem(ACCESS_TOKEN_KEY)
     localStorage.removeItem(REFRESH_TOKEN_KEY)
     localStorage.removeItem(EMAIL_KEY)
+    localStorage.removeItem(ROLE_KEY)
   }
 }

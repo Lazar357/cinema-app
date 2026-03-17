@@ -11,6 +11,18 @@ UserRoute.post("/login", async (req, res) => {
   );
 });
 
+UserRoute.post("/register", UserService.isAdmin as any, async (req, res) => {
+  await defineRequest(
+    res,
+    async () =>
+      await UserService.register(
+        req.body.email,
+        req.body.password,
+        req.body.role,
+      ),
+  );
+});
+
 UserRoute.get("/self", async (req: any, res) => {
   await defineRequest(res, async () => await UserService.self(req.user.email));
 });

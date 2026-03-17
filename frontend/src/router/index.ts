@@ -16,6 +16,8 @@ import NewInvoice from '@/views/invoice/NewInvoice.vue'
 import InvoiceArticleList from '@/views/invoice/article/InvoiceArticleList.vue'
 import EditInvoiceArticle from '@/views/invoice/article/EditInvoiceArticle.vue'
 import NewInvoiceArticle from '@/views/invoice/article/NewInvoiceArticle.vue'
+import NewUser from '@/views/user/NewUser.vue'
+import { AuthService } from '@/services/auth.service'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -23,6 +25,14 @@ const router = createRouter({
     {
       path: '/',
       redirect: '/client',
+    },
+    {
+      path: '/register',
+      component: NewUser,
+      meta: {
+        title: 'Register',
+        requiresAdmin: true,
+      },
     },
     {
       path: '/client',
@@ -150,6 +160,12 @@ router.beforeEach((to, from, next) => {
   if (to.meta.title) {
     document.title = `ASD2026 :: ${to.meta.title}`
   }
+
+  if (to.meta.requiresAdmin && !AuthService.isAdmin()) {
+    next('/')
+    return
+  }
+
   next()
 })
 

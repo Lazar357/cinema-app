@@ -23,6 +23,14 @@ export class MainService {
     })
   }
 
+  static async register(email: string, password: string, role: string) {
+    return this.useAxios('/user/register', 'post', {
+      email,
+      password,
+      role,
+    })
+  }
+
   static async useAxios(
     url: string,
     method: 'get' | 'post' | 'put' | 'delete' = 'get',

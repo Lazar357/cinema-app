@@ -19,10 +19,12 @@ export class UserService {
       const payload = {
         id: user.userId,
         email: user.email,
+        role: user.role,
       };
 
       return {
         email: user.email,
+        role: user.role,
         access: jwt.sign(payload, tokenSecret!, {
           expiresIn: accessTTL as any,
         }),
@@ -41,13 +43,23 @@ export class UserService {
     const payload = {
       id: user.userId,
       email: user.email,
+      role: user.role,
     };
 
     return {
       email: user.email,
+      role: user.role,
       access: jwt.sign(payload, tokenSecret!, { expiresIn: accessTTL as any }),
       refresh: token,
     };
+  }
+
+  static async register(email: string, password: string, role: string) {
+    const user = new User();
+    user.email = email;
+    user.password = await bcrypt.hash(password, 10);
+    user.role = role;
+    return await repo.save(user);
   }
 
   static async self(email: string) {
@@ -55,6 +67,7 @@ export class UserService {
       select: {
         userId: true,
         email: true,
+        role: true,
       },
       where: {
         email: email,
@@ -65,6 +78,18 @@ export class UserService {
     if (data == null) throw new Error("NOT_FOUND");
 
     return data;
+  }
+
+  static async isAdmin(req: any, res: Response, next: Function) {
+    if (req.user && req.user.role === "admin") {
+      next();
+      return;
+    }
+
+    res.status(403).json({
+      message: "FORBIDDEN_ONLY_ADMIN_ALLOWED",
+      timestamp: new Date(),
+    });
   }
 
   static async validateToken(req: any, res: Response, next: Function) {
