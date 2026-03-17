@@ -78,6 +78,8 @@ export class InvoiceService {
     const inv = await this.getInvoiceById(id);
     inv.vehicleId = model.vehicleId;
     inv.updatedAt = new Date();
+    if (model.paidAt !== undefined) inv.paidAt = model.paidAt;
+    if (model.generatedAt !== undefined) inv.generatedAt = model.generatedAt;
     await repo.save(inv);
   }
 

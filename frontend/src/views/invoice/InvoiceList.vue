@@ -29,10 +29,20 @@ MainService.useAxios(`/invoice/vehicle/${id}`)
     .catch(e => logout(e))
 
 function doDelete(invoice: InvoiceModel) {
+    if (!confirm('Are you sure you want to delete this invoice?')) return
     MainService.useAxios(`/invoice/${invoice.invoiceId}`, 'delete')
         .then(rsp => invoices.value = invoices.value?.filter(i =>
             i.invoiceId !== invoice.invoiceId
         ))
+        .catch(e => logout(e))
+}
+
+function markAsPaid(invoice: InvoiceModel) {
+    const updatedInvoice = { ...invoice, paidAt: new Date().toISOString() }
+    MainService.useAxios(`/invoice/${invoice.invoiceId}`, 'put', updatedInvoice)
+        .then(() => {
+            invoice.paidAt = updatedInvoice.paidAt
+        })
         .catch(e => logout(e))
 }
 
@@ -92,9 +102,17 @@ function calculateTotal(invoice: InvoiceModel) {
                 <td>{{ formatDate(i.createdAt) }}</td>
                 <td>{{ formatDate(i.updatedAt) }}</td>
                 <td>{{ formatDate(i.generatedAt) }}</td>
-                <td>{{ formatDate(i.paidAt) }}</td>
+                <td>
+                    <span v-if="i.paidAt" class="badge bg-success">
+                        {{ formatDate(i.paidAt) }}
+                    </span>
+                    <span v-else class="badge bg-warning text-dark">Unpaid</span>
+                </td>
                 <td>
                     <div class="btn-group">
+                        <button v-if="!i.paidAt" class="btn btn-sm btn-outline-success" @click="markAsPaid(i)" title="Mark as Paid">
+                            <i class="fa-solid fa-money-bill"></i>
+                        </button>
                         <RouterLink class="btn btn-sm btn-primary" :to="`/invoice/${i.invoiceId}/article`">
                             <i class="fa-solid fa-list-ul"></i>
                         </RouterLink>
